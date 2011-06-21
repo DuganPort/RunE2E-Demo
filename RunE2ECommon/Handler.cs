@@ -103,7 +103,7 @@ namespace RunE2ECommon
                 string[] aGuids = sLoggedActivities.Split(Convert.ToChar(","));
                 foreach (string sGuid in aGuids)
                 {
-                    //If we haven't yet logged the Guid of this particular entry
+                    //If we haven't yet logged the Guid of this particular entry, then this is a new Activity.  Huzzah.
                     if (0 == 1)
                     {
                         string sXml =
