@@ -155,6 +155,41 @@ namespace RunE2ECommon
                         oResponse = null;
                         oReader = null;
                     }
+
+                    //Update the User's custom field node
+                    oUserXml.SelectSingleNode("User")
+                 .SelectSingleNode("CustomFields")
+                 .SelectSingleNode("CustomField[ID=4814]")
+                 .SelectSingleNode("Value").InnerText += "," + "xyz123";
+                    WebRequest oUserUpdateRequest =
+                           WebRequest.Create(
+                           @"http://services.theport.com/REST/V1/Users?devkey=dedabf54c268d476f2e75db49207ab91b0bb3503f479d444fb5dedea817da66a5954def58cf8cd1d&sysuserid=1968941");
+                    oUserUpdateRequest.Method = "POST";
+                    oUserUpdateRequest.ContentType = "text/xml";
+                    System.Text.ASCIIEncoding userupdateencoding = new System.Text.ASCIIEncoding();
+                    byte[] bUserUpdateData = userupdateencoding.GetBytes(oUserXml.OuterXml);
+                    oUserUpdateRequest.ContentLength = bUserUpdateData.Length;
+                    Stream oUserUpdateStream = oUserUpdateRequest.GetRequestStream();
+                    oUserUpdateStream.Write(bUserUpdateData, 0, bUserUpdateData.Length);
+                    oUserUpdateStream.Close();
+                    HttpWebResponse oUserUpdateResponse;
+                    StreamReader oUserUpdateReader;
+                    string sUserUpdateResponseBody;
+                    try
+                    {
+                        oUserUpdateResponse = (System.Net.HttpWebResponse)oUserUpdateRequest.GetResponse();
+                        oUserUpdateReader = new StreamReader(oUserUpdateResponse.GetResponseStream());
+                        sUserUpdateResponseBody = oUserUpdateReader.ReadToEnd();
+
+                    }
+                    catch (System.Net.WebException we)
+                    {
+
+                    }
+                    oUserUpdateRequest = null;
+                    oUserUpdateResponse = null;
+                    oUserUpdateReader = null;
+
                 }
             }
         }
