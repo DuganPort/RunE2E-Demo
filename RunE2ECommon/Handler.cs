@@ -157,17 +157,29 @@ namespace RunE2ECommon
                     }
 
                     //Update the User's custom field node
-                    oUserXml.SelectSingleNode("User")
+                 oUserXml.SelectSingleNode("User")
                  .SelectSingleNode("CustomFields")
                  .SelectSingleNode("CustomField[ID=4814]")
-                 .SelectSingleNode("Value").InnerText += "," + "xyz123";
+                 .SelectSingleNode("Value").InnerText += "," + "!!!!!STUB; REPLACE WITH ACTUAL GUID!!!!!";
+
+                 string sUserUpdateXml =
+                     @"
+                           <Post>
+                                  <Action>2</Action>
+                                  <Parameters>" + oUserXml.OuterXml + @"
+                                  </Parameters>
+                            </Post>
+                        ";
+
+
+
                     WebRequest oUserUpdateRequest =
                            WebRequest.Create(
                            @"http://services.theport.com/REST/V1/Users?devkey=dedabf54c268d476f2e75db49207ab91b0bb3503f479d444fb5dedea817da66a5954def58cf8cd1d&sysuserid=1968941");
                     oUserUpdateRequest.Method = "POST";
                     oUserUpdateRequest.ContentType = "text/xml";
                     System.Text.ASCIIEncoding userupdateencoding = new System.Text.ASCIIEncoding();
-                    byte[] bUserUpdateData = userupdateencoding.GetBytes(oUserXml.OuterXml);
+                    byte[] bUserUpdateData = userupdateencoding.GetBytes(sUserUpdateXml);
                     oUserUpdateRequest.ContentLength = bUserUpdateData.Length;
                     Stream oUserUpdateStream = oUserUpdateRequest.GetRequestStream();
                     oUserUpdateStream.Write(bUserUpdateData, 0, bUserUpdateData.Length);
@@ -283,5 +295,6 @@ namespace RunE2ECommon
         public string Url { get; set; }
         public string RequestBody { get; set; }
         public string PayloadNode { get; set; }
+        public long ExternalActivityID { get; set; }
     }
 }
